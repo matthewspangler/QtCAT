@@ -1,0 +1,8 @@
+[Core]
+Name = Template Plugin
+Module = template_plugin
+
+[Documentation]
+Author = Matthew Spangler
+Version = 0.1
+Description = An example plugin template, for creating your own plugins!
