@@ -1,6 +1,5 @@
 import napalm
 from session_widget import QSessionSubWindow
-from PySide6.QtCore import QThread, Signal, Slot, QMutex
 import threading, queue
 import time
 
@@ -18,8 +17,8 @@ class DeviceThread(threading.Thread):
         self.device = self.driver(**self.device_info)
         # If set to true, loop in run() quits
         self.disconnect = False
-        self.run_plugin = False
         self.plugin = None
+        self.command = None
         # Anything put in le_queue is printed to the GUI
         self.le_queue = le_queue
 
@@ -34,13 +33,22 @@ class DeviceThread(threading.Thread):
         self.le_queue.put("Awaiting plugin choice.")
         while not self.disconnect:
             time.sleep(1)
-            if self.run_plugin:
+            if self.plugin:
                 self.le_queue.put("Running '{}' plugin...".format(self.plugin.name))
                 try:
                     self.plugin.plugin_object.run(self.device, self.le_queue)
                 except Exception as e:
                     self.le_queue.put(str(e))
-                self.run_plugin = False
+                self.plugin = None
+            if self.command:
+                self.le_queue.put("Running command...")
+                try:
+                    output = self.device.cli([self.command])
+                    self.le_queue.put(str(output))
+                except Exception as e:
+                    self.le_queue(str(e))
+                self.command = None
+
         self.le_queue.put("Disconnecting...")
         self.device.close()
 

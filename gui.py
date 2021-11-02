@@ -29,6 +29,7 @@ class CXAGui(QObject):
         self.sessionButton = self.window.findChild(QPushButton, 'sessionButton')
         self.connectButton = self.window.findChild(QPushButton, 'connectButton')
         self.runButton = self.window.findChild(QPushButton, 'runButton')
+        self.sendButton = self.window.findChild(QPushButton, 'sendButton')
         # Lists
         self.pluginList = self.window.findChild(QListWidget, 'pluginList')
         self.sessionList = self.window.findChild(QListWidget, 'sessionList')
@@ -38,6 +39,7 @@ class CXAGui(QObject):
         self.userEdit = self.window.findChild(QLineEdit, 'userEdit')
         self.passEdit = self.window.findChild(QLineEdit, 'passEdit')
         self.enpassEdit = self.window.findChild(QLineEdit, 'enpassEdit')
+        self.commandEdit = self.window.findChild(QLineEdit, 'commandEdit')
         # Combo Box
         self.osCombo = self.window.findChild(QComboBox, 'osCombo')
         # MDI Area
@@ -47,6 +49,7 @@ class CXAGui(QObject):
         self.sessionButton.clicked.connect(self.session_connect_button)
         self.connectButton.clicked.connect(self.top_connect_button)
         self.runButton.clicked.connect(self.run_script_handler)
+        self.sendButton.clicked.connect(self.run_command_handler)
         self.sessionMDI.subWindowActivated.connect(self.handle_subwindow_focus)
 
         # Keep track of the focused subwindow, so we know what window to run plugins on.
@@ -113,7 +116,10 @@ class CXAGui(QObject):
         plugin_text = self.pluginList.selectedItems()[0].text()
         plugin_choice = self.plugins[plugin_text]
         self.sessions[self.focused_subwindow].thread.plugin = plugin_choice
-        self.sessions[self.focused_subwindow].thread.run_plugin = True
+
+    def run_command_handler(self):
+        command = self.commandEdit.text()
+        self.sessions[self.focused_subwindow].thread.command = command
 
     def session_connect_button(self):
         self.set_session_toml()
