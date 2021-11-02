@@ -30,7 +30,7 @@ class DeviceThread(threading.Thread):
             self.le_queue.put(str(e))
             return
         self.le_queue.put("Connected!")
-        self.le_queue.put("Awaiting plugin choice.")
+        self.le_queue.put("Awaiting plugin choice or command.")
         while not self.disconnect:
             time.sleep(1)
             if self.plugin:
