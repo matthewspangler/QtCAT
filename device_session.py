@@ -79,15 +79,12 @@ class DeviceSession:
         self.test_function()
 
     def refresh_output(self, le_queue: queue):
-        count = 1
-        stuff = []
         while self.refresh:
             time.sleep(1)
             # Refresh output every 1 second:
             while not le_queue.empty():
                 output = le_queue.get()
                 le_queue.task_done()
-                stuff.append(output)
                 # TODO: crashes if queue output is very large?
                 self.session_window.outputEdit.append(output)
 
