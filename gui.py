@@ -3,6 +3,8 @@ from PySide6.QtCore import QFile, QIODevice, QObject
 from PySide6.QtUiTools import QUiLoader
 from yapsy.PluginManager import PluginManager
 from functools import partial
+from PySide6.QtWidgets import QDialog
+import sys
 import os
 import toml
 from device_session import DeviceSession
@@ -25,11 +27,28 @@ class CXAGui(QObject):
         self.window = loader.load(ui_file)
         ui_file.close()
 
+        # Dialogs
+        info_dialog_file = QFile('info_dialog.ui')
+        info_dialog_file.open(QFile.ReadOnly)
+        self.info_dialog = loader.load(info_dialog_file)
+        new_session_dialog_file = QFile('new_sesson_dialog.ui')
+        new_session_dialog_file.open(QFile.ReadOnly)
+        self.new_session_dialog = loader.load(new_session_dialog_file)
+        # Dialog's widgets
+        self.info_dialog.nameEdit = self.info_dialog.findChild(QLineEdit, 'nameEdit')
+        self.info_dialog.ipEdit = self.info_dialog.findChild(QLineEdit, 'ipEdit')
+        self.info_dialog.portEdit = self.info_dialog.findChild(QLineEdit, 'portEdit')
+        self.info_dialog.usernameEdit = self.info_dialog.findChild(QLineEdit, 'usernameEdit')
+        self.info_dialog.passwordEdit = self.info_dialog.findChild(QLineEdit, 'passwordEdit')
+        self.info_dialog.enpassEdit = self.info_dialog.findChild(QLineEdit, 'enpassEdit')
+        self.info_dialog.deviceBox = self.info_dialog.findChild(QComboBox, 'deviceBox')
         # Buttons
         self.sessionButton = self.window.findChild(QPushButton, 'sessionButton')
         self.connectButton = self.window.findChild(QPushButton, 'connectButton')
         self.runButton = self.window.findChild(QPushButton, 'runButton')
         self.sendButton = self.window.findChild(QPushButton, 'sendButton')
+        self.addButton = self.window.findChild(QPushButton, 'addButton')
+        self.infoButton = self.window.findChild(QPushButton, 'infoButton')
         # Lists
         self.pluginList = self.window.findChild(QListWidget, 'pluginList')
         self.sessionList = self.window.findChild(QListWidget, 'sessionList')
@@ -50,6 +69,8 @@ class CXAGui(QObject):
         self.connectButton.clicked.connect(self.top_connect_button)
         self.runButton.clicked.connect(self.run_script_handler)
         self.sendButton.clicked.connect(self.run_command_handler)
+        self.infoButton.clicked.connect(self.show_plugin_info)
+        self.addButton.clicked.connect(self.add_session)
         self.sessionMDI.subWindowActivated.connect(self.handle_subwindow_focus)
 
         # Keep track of the focused subwindow, so we know what window to run plugins on.
@@ -69,6 +90,22 @@ class CXAGui(QObject):
         self.populate_sessions_list()
 
         self.window.show()
+
+    def add_session(self):
+        self.new_session_dialog.show()
+        session_data = {}
+        ip = self.info_dialog.ipEdit.text()
+        port = self.info_dialog.portEdit.text()
+        username = self.info_dialog.usernameEdit.text()
+        password = self.info_dialog.passwordEdit.text()
+        enable_password = self.info_dialog.enpassEdit.text()
+        device_type = self.info_dialog.deviceBox.currentText()
+
+        pass
+
+    def show_plugin_info(self):
+        #self.info_dialogs
+        self.info_dialog.show()
 
     def handle_subwindow_focus(self, subwindow):
         self.focused_subwindow = subwindow

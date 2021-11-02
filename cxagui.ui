@@ -63,7 +63,7 @@
       <item>
        <widget class="QLabel" name="label">
         <property name="text">
-         <string>Device Type:</string>
+         <string>Device type:</string>
         </property>
        </widget>
       </item>
@@ -94,14 +94,22 @@
       <item>
        <widget class="QPushButton" name="connectButton">
         <property name="text">
-         <string>Connect</string>
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>assets/link-m.png</normaloff>assets/link-m.png</iconset>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QPushButton" name="disconnectButton">
         <property name="text">
-         <string>Disconnect</string>
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>assets/link-unlink-m.png</normaloff>assets/link-unlink-m.png</iconset>
         </property>
        </widget>
       </item>
@@ -127,8 +135,9 @@
       </item>
       <item>
        <widget class="QPushButton" name="sendButton">
-        <property name="text">
-         <string>Send Command</string>
+        <property name="icon">
+         <iconset>
+          <normaloff>assets/send-plane-2-line.png</normaloff>assets/send-plane-2-line.png</iconset>
         </property>
        </widget>
       </item>
@@ -180,28 +189,56 @@
            <height>0</height>
           </size>
          </property>
+         <property name="selectionMode">
+          <enum>QAbstractItemView::MultiSelection</enum>
+         </property>
         </widget>
        </item>
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item>
+          <spacer name="horizontalSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
           <widget class="QPushButton" name="addButton">
            <property name="text">
-            <string>Add Session</string>
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset>
+             <normaloff>assets/add-line.png</normaloff>assets/add-line.png</iconset>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QPushButton" name="deleteButton">
            <property name="text">
-            <string>Delete Session</string>
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset>
+             <normaloff>assets/delete-bin-7-line.png</normaloff>assets/delete-bin-7-line.png</iconset>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QPushButton" name="sessionButton">
            <property name="text">
-            <string>Connect</string>
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset>
+             <normaloff>assets/link.png</normaloff>assets/link.png</iconset>
            </property>
           </widget>
          </item>
@@ -226,7 +263,7 @@
     <bool>false</bool>
    </property>
    <property name="windowTitle">
-    <string>Plugin List</string>
+    <string>Script List</string>
    </property>
    <attribute name="dockWidgetArea">
     <number>1</number>
@@ -257,23 +294,48 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout">
          <item>
+          <spacer name="horizontalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
           <widget class="QPushButton" name="infoButton">
            <property name="text">
-            <string>Info</string>
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset>
+             <normaloff>assets/information-line.png</normaloff>assets/information-line.png</iconset>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QPushButton" name="refreshButton">
            <property name="text">
-            <string>Refresh List</string>
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset>
+             <normaloff>assets/refresh-line.png</normaloff>assets/refresh-line.png</iconset>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QPushButton" name="runButton">
            <property name="text">
-            <string>Run Plugin</string>
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset>
+             <normaloff>assets/play-line.png</normaloff>assets/play-line.png</iconset>
            </property>
           </widget>
          </item>

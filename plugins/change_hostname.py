@@ -11,7 +11,7 @@ class ChangeHostname(IPlugin):
         queue.put("Running change_hostname.py")
 
         dialog = PluginDialog()
-        hostname, ok = dialog.setupUi("blah", "blah")
+        hostname, ok = dialog.setupUi("Change hostname", "Please enter a hostname")
         if ok:
             queue.put("Changing hostname to '{}'".format(hostname))
             output = device.cli(["conf t",
