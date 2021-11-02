@@ -6,6 +6,9 @@ import time
 
 
 class DeviceThread(threading.Thread):
+    """
+    This is where the ssh/telnet connection happens, and where plugins are run on that connection.
+    """
     def __init__(self, device_info: dict, device_type: str, le_queue: queue):
         threading.Thread.__init__(self)
         self.lock = threading.Lock()
@@ -17,6 +20,7 @@ class DeviceThread(threading.Thread):
         self.disconnect = False
         self.run_plugin = False
         self.plugin = None
+        # Anything put in le_queue is printed to the GUI
         self.le_queue = le_queue
 
     def run(self):
@@ -42,15 +46,24 @@ class DeviceThread(threading.Thread):
 
 
 class DeviceSession:
+    """
+    This class creates 2 threads, one for running the device connection, and another for updating the GUI with output
+    from the device connection.
+    """
     def __init__(self, session_window: QSessionSubWindow, device_info: dict, device_type: str):
+        # Anything put in le_queue is printed to the GUI
         self.le_queue = queue.Queue()
 
+        # QSubWindow corresponding to the device session
         self.session_window = session_window
+
+        # Device connection thread
         self.thread = DeviceThread(device_info, device_type, self.le_queue)
         self.thread.start()
 
         # If set to true, loop in refresh_output() quits
         self.refresh = True
+        # Thread for refreshing GUI with output from DeviceThread()
         self.refresh_thread = threading.Thread(target=self.refresh_output, args=[self.le_queue])
         self.refresh_thread.start()
 
@@ -70,34 +83,10 @@ class DeviceSession:
                 # TODO: crashes if queue output is very large?
                 self.session_window.outputEdit.append(output)
 
-
     def test_function(self):
         print("Test Function")
-
-    def connect(self):
-        pass
 
     def disconnect(self):
         self.refresh = False
         self.thread.disconnect = True
-
-    def user_exec(self):
-        pass
-
-    def priv_exec(self):
-        pass
-
-    def global_conf(self):
-        pass
-
-    def interface_conf(self):
-        pass
-
-    def get_running_config(self):
-        pass
-
-    def get_startup_config(self):
-        pass
-
-    def get_interfaces(self):
-        pass
+        #del self.session_window
