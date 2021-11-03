@@ -1,0 +1,7 @@
+["Example Device"]
+ip = "localhost"
+port = "22"
+username = "admin"
+password = "admin"
+enable_password = "admin"
+device_type = "ios"
