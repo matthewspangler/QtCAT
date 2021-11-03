@@ -1,6 +1,6 @@
 import napalm
 from session_widget import QSessionWidget
-from PySide6.QtWidgets import QTextBrowser, QWidget, QTabWidget, QMdiSubWindow
+from PySide6.QtWidgets import QTextBrowser
 from PySide6.QtGui import QCloseEvent
 from PySide6.QtCore import Qt
 import threading, queue

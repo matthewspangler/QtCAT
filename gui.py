@@ -6,7 +6,7 @@ import yaml
 import toml
 from PySide6.QtCore import QFile, QObject
 from PySide6.QtUiTools import QUiLoader
-from PySide6.QtWidgets import QMdiArea, QLineEdit, QPushButton, QListWidget, QComboBox, QMdiSubWindow
+from PySide6.QtWidgets import QMdiArea, QLineEdit, QPushButton, QListWidget, QComboBox
 from yapsy.PluginManager import PluginManager
 
 from device_session import DeviceSession
