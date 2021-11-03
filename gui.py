@@ -63,7 +63,7 @@ class QtCAT(QObject):
         self.refreshPluginButton.clicked.connect(self.refresh_plugins)
         self.sessionButton.clicked.connect(self.session_connect_button)
         self.connectButton.clicked.connect(self.top_connect_button)
-        self.disconnectButton.clicked.connect(self.discconect_handler)
+        self.disconnectButton.clicked.connect(self.disconnect_handler)
         self.runButton.clicked.connect(self.run_script_handler)
         self.sendButton.clicked.connect(self.run_command_handler)
         self.commandEdit.returnPressed.connect(self.run_command_handler)
@@ -201,7 +201,7 @@ class QtCAT(QObject):
             plugin_choice = self.plugins[plugin_text]
             self.sessions[self.focused_subwindow].thread.plugin = plugin_choice
 
-    def discconect_handler(self):
+    def disconnect_handler(self):
         self.sessions[self.focused_subwindow].disconnect = True
 
     def run_command_handler(self):
