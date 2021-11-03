@@ -6,7 +6,7 @@ setup(
     packages=[''],
     url='',
     license='GPL-3',
-    author='matthewspangler',
+    author='Matthew Spangler',
     author_email='mattspangler@protonmail.com',
     description='Qt tool for running NAPALM scripts on saved device sessions.'
 )
