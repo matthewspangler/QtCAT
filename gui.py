@@ -97,10 +97,11 @@ class QtCAT(QObject):
         self.window.show()
 
     def delete_session(self):
-        for selection in self.sessionList.selectedItems():
-            self.sessions_toml.pop(selection.text())
-            self.sessionList.takeItem(self.sessionList.row(selection))
-        self.save_session_toml()
+        if self.sessionList.selectedItems():
+            for selection in self.sessionList.selectedItems():
+                self.sessions_toml.pop(selection.text())
+                self.sessionList.takeItem(self.sessionList.row(selection))
+            self.save_session_toml()
 
     def edit_sessions(self):
         editor = os.getenv('EDITOR')
@@ -133,15 +134,16 @@ class QtCAT(QObject):
             self.sessionList.addItem(item)
 
     def show_plugin_info(self):
-        plugin_text = self.pluginList.selectedItems()[0].text()
-        plugin = self.plugins[plugin_text]
-        plugin_info = {"name": plugin.name,
-                       "description": plugin.description,
-                       "author": plugin.author}
-        pretty_info = yaml.dump(plugin_info, allow_unicode=True, default_flow_style=False)
-        self.info_dialog.plugin = plugin
-        self.info_dialog.infoBrowser.append(pretty_info)
-        self.info_dialog.window.show()
+        if self.pluginList.selectedItems():
+            plugin_text = self.pluginList.selectedItems()[0].text()
+            plugin = self.plugins[plugin_text]
+            plugin_info = {"name": plugin.name,
+                           "description": plugin.description,
+                           "author": plugin.author}
+            pretty_info = yaml.dump(plugin_info, allow_unicode=True, default_flow_style=False)
+            self.info_dialog.plugin = plugin
+            self.info_dialog.infoBrowser.append(pretty_info)
+            self.info_dialog.window.show()
 
     def handle_subwindow_focus(self, subwindow):
         self.focused_subwindow = subwindow
@@ -194,9 +196,10 @@ class QtCAT(QObject):
             self.pluginList.addItem(plugin)
 
     def run_script_handler(self):
-        plugin_text = self.pluginList.selectedItems()[0].text()
-        plugin_choice = self.plugins[plugin_text]
-        self.sessions[self.focused_subwindow].thread.plugin = plugin_choice
+        if self.pluginList.selectedItems():
+            plugin_text = self.pluginList.selectedItems()[0].text()
+            plugin_choice = self.plugins[plugin_text]
+            self.sessions[self.focused_subwindow].thread.plugin = plugin_choice
 
     def discconect_handler(self):
         self.sessions[self.focused_subwindow].disconnect = True
@@ -206,17 +209,17 @@ class QtCAT(QObject):
         self.sessions[self.focused_subwindow].thread.command = command
 
     def session_connect_button(self):
-        self.set_session_toml()
-        # TODO - multiple device selections
-        for list_selection in self.sessionList.selectedItems():
-            device_toml = self.sessions_toml[list_selection.text()]
-            ip = device_toml["ip"]
-            port = device_toml["port"]
-            username = device_toml["username"]
-            password = device_toml["password"]
-            enable_password = device_toml["enable_password"]
-            device_type = device_toml["device_type"]
-            self.new_tab_session(ip, port, username, password, enable_password, device_type)
+        if self.sessionList.selectedItems() != 0:
+            self.set_session_toml()
+            for list_selection in self.sessionList.selectedItems():
+                device_toml = self.sessions_toml[list_selection.text()]
+                ip = device_toml["ip"]
+                port = device_toml["port"]
+                username = device_toml["username"]
+                password = device_toml["password"]
+                enable_password = device_toml["enable_password"]
+                device_type = device_toml["device_type"]
+                self.new_tab_session(ip, port, username, password, enable_password, device_type)
 
     def top_connect_button(self):
         # TODO: error handling for invalid values, and detecting default line edit values:
