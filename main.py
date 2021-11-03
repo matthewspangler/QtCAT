@@ -1,4 +1,4 @@
-from gui import CXAGui
+from gui import QtCAT
 from PySide6.QtWidgets import QApplication
 import sys
 import os
@@ -9,7 +9,7 @@ def main():
 
     app = QApplication(sys.argv)
     #app.setStyle('Fusion')
-    form = CXAGui('cxagui.ui')
+    form = QtCAT('cxagui.ui')
     sys.exit(app.exec())
 
 
