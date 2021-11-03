@@ -1,5 +1,4 @@
 import napalm
-from session_widget import QSessionWidget
 from PySide6.QtWidgets import QTextBrowser
 from PySide6.QtGui import QCloseEvent
 from PySide6.QtCore import Qt
@@ -56,7 +55,7 @@ class DeviceThread(threading.Thread):
         self.device.close()
 
 
-class DeviceSession(QTextBrowser):
+class QDeviceSession(QTextBrowser):
     """
     This class creates 2 threads, one for running the device connection, and another for updating the GUI with output
     from the device connection.
@@ -81,9 +80,9 @@ class DeviceSession(QTextBrowser):
         self.refresh_thread.start()
 
     def closeEvent(self, event: QCloseEvent) -> None:
-        self.thread.disconnect = True
+        self.disconnect()
         self.thread.join()
-        self.refresh = False
+        self.refresh_thread.join()
 
     def refresh_output(self, le_queue: queue):
         while self.refresh:

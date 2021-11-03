@@ -9,9 +9,8 @@ from PySide6.QtUiTools import QUiLoader
 from PySide6.QtWidgets import QMdiArea, QLineEdit, QPushButton, QListWidget, QComboBox
 from yapsy.PluginManager import PluginManager
 
-from device_session import DeviceSession
+from device_session import QDeviceSession
 from dialogs import InfoDialog, NewSessionDialog
-from session_widget import QSessionWidget
 
 # Discovers relative path (for differentiating between development and production plugin directories)
 here = os.path.abspath(os.path.dirname(__file__))
@@ -91,7 +90,6 @@ class QtCAT(QObject):
 
         # Load sessions list from toml data
         self.sessions_toml = {}
-        self.sessions = []
         self.populate_sessions_list()
 
         self.window.show()
@@ -154,10 +152,6 @@ class QtCAT(QObject):
     def new_tab_session(self, ip, port, username, password, enable_pass, device_type):
         # TODO: check for existing session!
         # New connection to device
-        line_edit = QSessionWidget("{}:{}".format(ip, port))
-        new_window = self.sessionMDI.addSubWindow(line_edit)
-        new_window.outputEdit = line_edit
-        new_window.outputEdit.show()
         device_info = {"hostname": ip,
                        "username": username,
                        "password": password,
@@ -165,9 +159,10 @@ class QtCAT(QObject):
                                          "transport": "telnet",
                                          "global_delay_factor": 2}
                        }
-        new_session = DeviceSession(device_info, device_type)
-        # Associate DeviceSession with the session widget (QSessionWidget)
-        self.sessions.append(new_session)
+        line_edit = QDeviceSession(device_info, device_type)
+        new_window = self.sessionMDI.addSubWindow(line_edit)
+        new_window.outputEdit = line_edit
+        new_window.outputEdit.show()
 
     def close_tab_session(self):
         # TODO
@@ -203,15 +198,15 @@ class QtCAT(QObject):
         if self.pluginList.selectedItems():
             plugin_text = self.pluginList.selectedItems()[0].text()
             plugin_choice = self.plugins[plugin_text]
-            self.get_focused_subwindow().thread.plugin = plugin_choice
+            self.get_focused_subwindow().outputEdit.thread.plugin = plugin_choice
 
     def disconnect_handler(self):
-        if self.focused_subwindow:
-            self.get_focused_subwindow().disconnect = True
+        if self.get_focused_subwindow():
+            self.get_focused_subwindow().close()
 
     def run_command_handler(self):
         command = self.commandEdit.text()
-        self.get_focused_subwindow().thread.command = command
+        self.get_focused_subwindow().outputEdit.thread.command = command
 
     def session_connect_button(self):
         if self.sessionList.selectedItems() != 0:
