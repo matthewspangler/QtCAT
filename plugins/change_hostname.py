@@ -1,8 +1,6 @@
 from yapsy.IPlugin import IPlugin
 import napalm
 import queue
-from PySide6.QtWidgets import QInputDialog, QWidget
-from PySide6.QtCore import Qt
 from dialogs import PluginDialog
 
 

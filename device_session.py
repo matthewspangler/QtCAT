@@ -64,7 +64,6 @@ class DeviceSession:
 
         # QSubWindow corresponding to the device session
         self.session_window = session_window
-
         # Device connection thread
         self.thread = DeviceThread(device_info, device_type, self.le_queue)
         self.thread.start()
@@ -74,9 +73,6 @@ class DeviceSession:
         # Thread for refreshing GUI with output from DeviceThread()
         self.refresh_thread = threading.Thread(target=self.refresh_output, args=[self.le_queue])
         self.refresh_thread.start()
-
-        # Comment or uncomment this function to run code automatically on connect:
-        self.test_function()
 
     def refresh_output(self, le_queue: queue):
         while self.refresh:
@@ -88,10 +84,6 @@ class DeviceSession:
                 # TODO: crashes if queue output is very large?
                 self.session_window.outputEdit.append(output)
 
-    def test_function(self):
-        print("Test Function")
-
     def disconnect(self):
         self.refresh = False
         self.thread.disconnect = True
-        #del self.session_window

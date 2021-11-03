@@ -1,5 +1,6 @@
 import os
 from functools import partial
+import logging
 
 import toml
 from PySide6.QtCore import QFile, QObject
@@ -68,7 +69,7 @@ class QtCAT(QObject):
         self.info_dialog = InfoDialog('info_dialog.ui')
         self.new_session_dialog = NewSessionDialog('new_sesson_dialog.ui')
         self.new_session_dialog.okButton.clicked.connect(self.add_session)
-        #self.new_session_dialog.accepted.connect(self.add_session)
+        # self.new_session_dialog.accepted.connect(self.add_session)
 
         # Keep track of the focused subwindow, so we know what window to run plugins on.
         self.focused_subwindow = None
