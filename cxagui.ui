@@ -241,6 +241,28 @@
           </widget>
          </item>
          <item>
+          <widget class="QPushButton" name="editButton">
+           <property name="text">
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset>
+             <normaloff>assets/file-edit-line.png</normaloff>assets/file-edit-line.png</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="refreshSessionButton">
+           <property name="text">
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset>
+             <normaloff>assets/refresh-line.png</normaloff>assets/refresh-line.png</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QPushButton" name="sessionButton">
            <property name="text">
             <string/>
@@ -327,7 +349,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="refreshButton">
+          <widget class="QPushButton" name="refreshPluginButton">
            <property name="text">
             <string/>
            </property>

@@ -1,6 +1,7 @@
 from PySide6.QtUiTools import QUiLoader
-from PySide6.QtWidgets import QWidget, QPushButton, QLabel, QInputDialog, QLineEdit, QDialog, QComboBox
+from PySide6.QtWidgets import QWidget, QPushButton, QLabel, QInputDialog, QLineEdit, QDialog, QComboBox, QTextBrowser
 from PySide6.QtCore import QRect, QFile
+import os, webbrowser
 
 
 class PluginDialog(QWidget):
@@ -35,6 +36,18 @@ class InfoDialog(QDialog):
         loader = QUiLoader()
         self.window = loader.load(ui_file)
         ui_file.close()
+
+        self.infoBrowser = self.window.findChild(QTextBrowser, 'infoBrowser')
+        self.editButton = self.window.findChild(QPushButton, 'editButton')
+        self.editButton.clicked.connect(self.edit_plugin)
+        self.plugin = None
+
+    def edit_plugin(self):
+        editor = os.getenv('EDITOR')
+        if editor:
+            os.system(editor + ' ' + self.plugin.path + '.py')
+        else:
+            webbrowser.open(self.plugin.path + '.py')
 
 
 class NewSessionDialog(QDialog):

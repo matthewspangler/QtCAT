@@ -1,6 +1,7 @@
 import os
 from functools import partial
-import logging
+import webbrowser
+import yaml
 
 import toml
 from PySide6.QtCore import QFile, QObject
@@ -36,8 +37,11 @@ class QtCAT(QObject):
         self.runButton = self.window.findChild(QPushButton, 'runButton')
         self.sendButton = self.window.findChild(QPushButton, 'sendButton')
         self.addButton = self.window.findChild(QPushButton, 'addButton')
+        self.editButton = self.window.findChild(QPushButton, 'editButton')
         self.infoButton = self.window.findChild(QPushButton, 'infoButton')
         self.deleteButton = self.window.findChild(QPushButton, 'deleteButton')
+        self.refreshSessionButton = self.window.findChild(QPushButton, 'refreshSessionButton')
+        self.refreshPluginButton = self.window.findChild(QPushButton, 'refreshPluginButton')
         # Lists
         self.pluginList = self.window.findChild(QListWidget, 'pluginList')
         self.sessionList = self.window.findChild(QListWidget, 'sessionList')
@@ -54,6 +58,9 @@ class QtCAT(QObject):
         self.sessionMDI = self.window.findChild(QMdiArea, 'sessionMDI')
 
         # Connect widgets with functions:
+        self.editButton.clicked.connect(self.edit_sessions)
+        self.refreshSessionButton.clicked.connect(self.refresh_sessions)
+        self.refreshPluginButton.clicked.connect(self.refresh_plugins)
         self.sessionButton.clicked.connect(self.session_connect_button)
         self.connectButton.clicked.connect(self.top_connect_button)
         self.disconnectButton.clicked.connect(self.discconect_handler)
@@ -95,6 +102,24 @@ class QtCAT(QObject):
             self.sessionList.takeItem(self.sessionList.row(selection))
         self.save_session_toml()
 
+    def edit_sessions(self):
+        editor = os.getenv('EDITOR')
+        if editor:
+            os.system(editor + ' ' + sessions_toml_file)
+        else:
+            webbrowser.open(sessions_toml_file)
+
+    def refresh_sessions(self):
+        self.sessionList.clear()
+        self.sessions = {}
+        self.populate_sessions_list()
+        pass
+
+    def refresh_plugins(self):
+        self.pluginList.clear()
+        self.plugins = {}
+        self.populate_plugins()
+
     def show_session_dialog(self):
         self.new_session_dialog.window.show()
 
@@ -108,6 +133,14 @@ class QtCAT(QObject):
             self.sessionList.addItem(item)
 
     def show_plugin_info(self):
+        plugin_text = self.pluginList.selectedItems()[0].text()
+        plugin = self.plugins[plugin_text]
+        plugin_info = {"name": plugin.name,
+                       "description": plugin.description,
+                       "author": plugin.author}
+        pretty_info = yaml.dump(plugin_info, allow_unicode=True, default_flow_style=False)
+        self.info_dialog.plugin = plugin
+        self.info_dialog.infoBrowser.append(pretty_info)
         self.info_dialog.window.show()
 
     def handle_subwindow_focus(self, subwindow):
