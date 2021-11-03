@@ -93,6 +93,9 @@
       </item>
       <item>
        <widget class="QPushButton" name="connectButton">
+        <property name="toolTip">
+         <string>Connect</string>
+        </property>
         <property name="text">
          <string/>
         </property>
@@ -104,6 +107,9 @@
       </item>
       <item>
        <widget class="QPushButton" name="disconnectButton">
+        <property name="toolTip">
+         <string>Disconnect</string>
+        </property>
         <property name="text">
          <string/>
         </property>
@@ -141,6 +147,9 @@
       </item>
       <item>
        <widget class="QPushButton" name="sendButton">
+        <property name="toolTip">
+         <string>Send command</string>
+        </property>
         <property name="icon">
          <iconset>
           <normaloff>assets/send-plane-2-line.png</normaloff>assets/send-plane-2-line.png</iconset>
@@ -220,6 +229,9 @@
          </item>
          <item>
           <widget class="QPushButton" name="addButton">
+           <property name="toolTip">
+            <string>Add new session</string>
+           </property>
            <property name="text">
             <string/>
            </property>
@@ -231,6 +243,9 @@
          </item>
          <item>
           <widget class="QPushButton" name="deleteButton">
+           <property name="toolTip">
+            <string>Delete selected session</string>
+           </property>
            <property name="text">
             <string/>
            </property>
@@ -242,6 +257,9 @@
          </item>
          <item>
           <widget class="QPushButton" name="editButton">
+           <property name="toolTip">
+            <string>Edit sessions</string>
+           </property>
            <property name="text">
             <string/>
            </property>
@@ -253,6 +271,9 @@
          </item>
          <item>
           <widget class="QPushButton" name="refreshSessionButton">
+           <property name="toolTip">
+            <string>Refresh sessions list</string>
+           </property>
            <property name="text">
             <string/>
            </property>
@@ -264,6 +285,9 @@
          </item>
          <item>
           <widget class="QPushButton" name="sessionButton">
+           <property name="toolTip">
+            <string>Connect to selected session</string>
+           </property>
            <property name="text">
             <string/>
            </property>
@@ -339,6 +363,9 @@
          </item>
          <item>
           <widget class="QPushButton" name="infoButton">
+           <property name="toolTip">
+            <string>View plugin information</string>
+           </property>
            <property name="text">
             <string/>
            </property>
@@ -350,6 +377,9 @@
          </item>
          <item>
           <widget class="QPushButton" name="refreshPluginButton">
+           <property name="toolTip">
+            <string>Refresh plugins list</string>
+           </property>
            <property name="text">
             <string/>
            </property>
@@ -361,6 +391,9 @@
          </item>
          <item>
           <widget class="QPushButton" name="runButton">
+           <property name="toolTip">
+            <string>Run plugin</string>
+           </property>
            <property name="text">
             <string/>
            </property>

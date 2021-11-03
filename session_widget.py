@@ -1,10 +1,13 @@
-from PySide6.QtWidgets import QTextBrowser, QMdiSubWindow
+from PySide6.QtWidgets import QTextBrowser, QWidget, QTabWidget, QMdiSubWindow
+from PySide6.QtGui import QCloseEvent
+from PySide6.QtCore import Qt
 
 
-class QSessionSubWindow(QMdiSubWindow):
-    def __init__(self, title):
+class QSessionWidget(QTextBrowser):
+    def __init__(self, title, ):
         super().__init__()
-        self.outputEdit = QTextBrowser()
-        self.setWidget(self.outputEdit)
+        self.setAttribute(Qt.WA_DeleteOnClose)
         self.setWindowTitle(title)
-        # TODO: disconnect, close, delete, cleanup
+
+    def closeEvent(self, event: QCloseEvent) -> None:
+        pass

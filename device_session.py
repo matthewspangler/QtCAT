@@ -1,5 +1,8 @@
 import napalm
-from session_widget import QSessionSubWindow
+from session_widget import QSessionWidget
+from PySide6.QtWidgets import QTextBrowser, QWidget, QTabWidget, QMdiSubWindow
+from PySide6.QtGui import QCloseEvent
+from PySide6.QtCore import Qt
 import threading, queue
 import time
 
@@ -53,17 +56,20 @@ class DeviceThread(threading.Thread):
         self.device.close()
 
 
-class DeviceSession:
+class DeviceSession(QTextBrowser):
     """
     This class creates 2 threads, one for running the device connection, and another for updating the GUI with output
     from the device connection.
     """
-    def __init__(self, session_window: QSessionSubWindow, device_info: dict, device_type: str):
+    def __init__(self, device_info: dict, device_type: str):
+        super().__init__()
+
+        self.setAttribute(Qt.WA_DeleteOnClose)
+        self.setWindowTitle("{}:{}".format(device_info["hostname"], device_info["optional_args"]["port"]))
+
         # Anything put in le_queue is printed to the GUI
         self.le_queue = queue.Queue()
 
-        # QSubWindow corresponding to the device session
-        self.session_window = session_window
         # Device connection thread
         self.thread = DeviceThread(device_info, device_type, self.le_queue)
         self.thread.start()
@@ -74,6 +80,11 @@ class DeviceSession:
         self.refresh_thread = threading.Thread(target=self.refresh_output, args=[self.le_queue])
         self.refresh_thread.start()
 
+    def closeEvent(self, event: QCloseEvent) -> None:
+        self.thread.disconnect = True
+        self.thread.join()
+        self.refresh = False
+
     def refresh_output(self, le_queue: queue):
         while self.refresh:
             time.sleep(1)
@@ -82,7 +93,7 @@ class DeviceSession:
                 output = le_queue.get()
                 le_queue.task_done()
                 # TODO: crashes if queue output is very large?
-                self.session_window.outputEdit.append(output)
+                self.append(output)
 
     def disconnect(self):
         self.refresh = False

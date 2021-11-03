@@ -6,12 +6,12 @@ import yaml
 import toml
 from PySide6.QtCore import QFile, QObject
 from PySide6.QtUiTools import QUiLoader
-from PySide6.QtWidgets import QMdiArea, QLineEdit, QPushButton, QListWidget, QComboBox
+from PySide6.QtWidgets import QMdiArea, QLineEdit, QPushButton, QListWidget, QComboBox, QMdiSubWindow
 from yapsy.PluginManager import PluginManager
 
 from device_session import DeviceSession
 from dialogs import InfoDialog, NewSessionDialog
-from session_widget import QSessionSubWindow
+from session_widget import QSessionWidget
 
 # Discovers relative path (for differentiating between development and production plugin directories)
 here = os.path.abspath(os.path.dirname(__file__))
@@ -91,10 +91,13 @@ class QtCAT(QObject):
 
         # Load sessions list from toml data
         self.sessions_toml = {}
-        self.sessions = {}
+        self.sessions = []
         self.populate_sessions_list()
 
         self.window.show()
+
+    def get_focused_subwindow(self):
+        return self.sessionMDI.activeSubWindow()
 
     def delete_session(self):
         if self.sessionList.selectedItems():
@@ -151,9 +154,10 @@ class QtCAT(QObject):
     def new_tab_session(self, ip, port, username, password, enable_pass, device_type):
         # TODO: check for existing session!
         # New connection to device
-        new_window = QSessionSubWindow("{}:{}".format(ip, port))
-        self.sessionMDI.addSubWindow(new_window)
-        new_window.show()
+        line_edit = QSessionWidget("{}:{}".format(ip, port))
+        new_window = self.sessionMDI.addSubWindow(line_edit)
+        new_window.outputEdit = line_edit
+        new_window.outputEdit.show()
         device_info = {"hostname": ip,
                        "username": username,
                        "password": password,
@@ -161,9 +165,9 @@ class QtCAT(QObject):
                                          "transport": "telnet",
                                          "global_delay_factor": 2}
                        }
-        new_session = DeviceSession(new_window, device_info, device_type)
-        # Associate DeviceSession with the session widget (QSessionSubWindow)
-        self.sessions[new_window] = new_session
+        new_session = DeviceSession(device_info, device_type)
+        # Associate DeviceSession with the session widget (QSessionWidget)
+        self.sessions.append(new_session)
 
     def close_tab_session(self):
         # TODO
@@ -199,14 +203,15 @@ class QtCAT(QObject):
         if self.pluginList.selectedItems():
             plugin_text = self.pluginList.selectedItems()[0].text()
             plugin_choice = self.plugins[plugin_text]
-            self.sessions[self.focused_subwindow].thread.plugin = plugin_choice
+            self.get_focused_subwindow().thread.plugin = plugin_choice
 
     def disconnect_handler(self):
-        self.sessions[self.focused_subwindow].disconnect = True
+        if self.focused_subwindow:
+            self.get_focused_subwindow().disconnect = True
 
     def run_command_handler(self):
         command = self.commandEdit.text()
-        self.sessions[self.focused_subwindow].thread.command = command
+        self.get_focused_subwindow().thread.command = command
 
     def session_connect_button(self):
         if self.sessionList.selectedItems() != 0:
