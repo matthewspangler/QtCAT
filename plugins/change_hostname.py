@@ -3,7 +3,7 @@ import napalm
 import queue
 from PySide6.QtWidgets import QInputDialog, QWidget
 from PySide6.QtCore import Qt
-from plugin_dialog import PluginDialog
+from dialogs import PluginDialog
 
 
 class ChangeHostname(IPlugin):

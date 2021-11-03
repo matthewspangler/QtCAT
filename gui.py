@@ -2,12 +2,13 @@ import os
 from functools import partial
 
 import toml
-from PySide6.QtCore import QFile, QObject, SIGNAL, SLOT
+from PySide6.QtCore import QFile, QObject
 from PySide6.QtUiTools import QUiLoader
-from PySide6.QtWidgets import QMdiArea, QLineEdit, QPushButton, QListWidget, QComboBox, QDialogButtonBox, QDialog
+from PySide6.QtWidgets import QMdiArea, QLineEdit, QPushButton, QListWidget, QComboBox
 from yapsy.PluginManager import PluginManager
 
 from device_session import DeviceSession
+from dialogs import InfoDialog, NewSessionDialog
 from session_widget import QSessionSubWindow
 
 # Discovers relative path (for differentiating between development and production plugin directories)
@@ -15,61 +16,6 @@ here = os.path.abspath(os.path.dirname(__file__))
 get_path = partial(os.path.join, here)
 
 sessions_toml_file = "session_list.toml"
-
-
-class InfoDialog(QDialog):
-    def __init__(self, ui_file):
-        super().__init__()
-        ui_file = QFile(ui_file)
-        ui_file.open(QFile.ReadOnly)
-
-        loader = QUiLoader()
-        self.window = loader.load(ui_file)
-        ui_file.close()
-
-
-class NewSessionDialog(QDialog):
-    def __init__(self, ui_file, parent=None):
-        super().__init__()
-        ui_file = QFile(ui_file)
-        ui_file.open(QFile.ReadOnly)
-
-        loader = QUiLoader()
-        self.window = loader.load(ui_file)
-        ui_file.close()
-
-        # Dialog's widgets
-        self.nameEdit = self.window.findChild(QLineEdit, 'nameEdit')
-        self.ipEdit = self.window.findChild(QLineEdit, 'ipEdit')
-        self.portEdit = self.window.findChild(QLineEdit, 'portEdit')
-        self.usernameEdit = self.window.findChild(QLineEdit, 'usernameEdit')
-        self.passwordEdit = self.window.findChild(QLineEdit, 'passwordEdit')
-        self.enpassEdit = self.window.findChild(QLineEdit, 'enpassEdit')
-        self.deviceBox = self.window.findChild(QComboBox, 'deviceBox')
-        self.okButton = self.window.findChild(QPushButton, 'okButton')
-        self.cancelButton = self.window.findChild(QPushButton, 'cancelButton')
-        self.cancelButton.clicked.connect(self.cancel)
-        self.session_data = {}
-
-    def cancel(self):
-        self.window.close()
-
-    def create_session_dict(self):
-        # Sets up session info in a dict for being added to the toml data later
-        name = self.nameEdit.text()
-        ip = self.ipEdit.text()
-        port = self.portEdit.text()
-        username = self.usernameEdit.text()
-        password = self.passwordEdit.text()
-        enable_password = self.enpassEdit.text()
-        device_type = self.deviceBox.currentText()
-        session_data = {"ip": ip,
-                        "port": port,
-                        "username": username,
-                        "password": password,
-                        "enable_password": enable_password,
-                        "device_type": device_type}
-        return name, session_data
 
 
 class QtCAT(QObject):
