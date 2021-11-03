@@ -31,6 +31,7 @@ class QtCAT(QObject):
         # Buttons
         self.sessionButton = self.window.findChild(QPushButton, 'sessionButton')
         self.connectButton = self.window.findChild(QPushButton, 'connectButton')
+        self.disconnectButton = self.window.findChild(QPushButton, 'disconnectButton')
         self.runButton = self.window.findChild(QPushButton, 'runButton')
         self.sendButton = self.window.findChild(QPushButton, 'sendButton')
         self.addButton = self.window.findChild(QPushButton, 'addButton')
@@ -54,8 +55,10 @@ class QtCAT(QObject):
         # Connect widgets with functions:
         self.sessionButton.clicked.connect(self.session_connect_button)
         self.connectButton.clicked.connect(self.top_connect_button)
+        self.disconnectButton.clicked.connect(self.discconect_handler)
         self.runButton.clicked.connect(self.run_script_handler)
         self.sendButton.clicked.connect(self.run_command_handler)
+        self.commandEdit.returnPressed.connect(self.run_command_handler)
         self.infoButton.clicked.connect(self.show_plugin_info)
         self.addButton.clicked.connect(self.show_session_dialog)
         self.deleteButton.clicked.connect(self.delete_session)
@@ -139,9 +142,10 @@ class QtCAT(QObject):
         f.close()
 
     def populate_sessions_list(self):
-        self.set_session_toml()
-        for item in self.sessions_toml:
-            self.sessionList.addItem(item)
+        if os.path.exists(sessions_toml_file):
+            self.set_session_toml()
+            for item in self.sessions_toml:
+                self.sessionList.addItem(item)
 
     def save_sessions_list(self):
         # TODO
@@ -158,6 +162,9 @@ class QtCAT(QObject):
         plugin_text = self.pluginList.selectedItems()[0].text()
         plugin_choice = self.plugins[plugin_text]
         self.sessions[self.focused_subwindow].thread.plugin = plugin_choice
+
+    def discconect_handler(self):
+        self.sessions[self.focused_subwindow].disconnect = True
 
     def run_command_handler(self):
         command = self.commandEdit.text()
