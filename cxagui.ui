@@ -126,6 +126,12 @@
       <property name="viewMode">
        <enum>QMdiArea::TabbedView</enum>
       </property>
+      <property name="tabsClosable">
+       <bool>true</bool>
+      </property>
+      <property name="tabsMovable">
+       <bool>true</bool>
+      </property>
      </widget>
     </item>
     <item row="2" column="0">
@@ -193,7 +199,7 @@
           </size>
          </property>
          <property name="selectionMode">
-          <enum>QAbstractItemView::MultiSelection</enum>
+          <enum>QAbstractItemView::ExtendedSelection</enum>
          </property>
         </widget>
        </item>

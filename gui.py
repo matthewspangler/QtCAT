@@ -114,6 +114,7 @@ class QtCAT(QObject):
         self.focused_subwindow = subwindow
 
     def new_tab_session(self, ip, port, username, password, enable_pass, device_type):
+        # TODO: check for existing session!
         # New connection to device
         new_window = QSessionSubWindow("{}:{}".format(ip, port))
         self.sessionMDI.addSubWindow(new_window)
@@ -174,15 +175,15 @@ class QtCAT(QObject):
     def session_connect_button(self):
         self.set_session_toml()
         # TODO - multiple device selections
-        list_selection = self.sessionList.selectedItems()[0].text()
-        device_toml = self.sessions_toml[list_selection]
-        ip = device_toml["ip"]
-        port = device_toml["port"]
-        username = device_toml["username"]
-        password = device_toml["password"]
-        enable_password = device_toml["enable_password"]
-        device_type = device_toml["device_type"]
-        self.new_tab_session(ip, port, username, password, enable_password, device_type)
+        for list_selection in self.sessionList.selectedItems():
+            device_toml = self.sessions_toml[list_selection.text()]
+            ip = device_toml["ip"]
+            port = device_toml["port"]
+            username = device_toml["username"]
+            password = device_toml["password"]
+            enable_password = device_toml["enable_password"]
+            device_type = device_toml["device_type"]
+            self.new_tab_session(ip, port, username, password, enable_password, device_type)
 
     def top_connect_button(self):
         # TODO: error handling for invalid values, and detecting default line edit values:

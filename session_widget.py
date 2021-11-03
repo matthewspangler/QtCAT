@@ -7,3 +7,4 @@ class QSessionSubWindow(QMdiSubWindow):
         self.outputEdit = QTextBrowser()
         self.setWidget(self.outputEdit)
         self.setWindowTitle(title)
+        # TODO: disconnect, close, delete, cleanup
