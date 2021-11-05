@@ -5,11 +5,3 @@ username = "admin"
 password = "admin"
 enable_password = "admin"
 device_type = "ios"
-
-["F340-09-15-COMM:2055"]
-ip = "F340-09-15-COMM"
-port = "2055"
-username = "admin"
-password = "cisco!123"
-enable_password = ""
-device_type = "ios"
