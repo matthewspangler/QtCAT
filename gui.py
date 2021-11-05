@@ -229,5 +229,4 @@ class QtCAT(QObject):
         password = self.passEdit.text()
         enable_pass = self.enpassEdit.text()
         device_type = self.osCombo.currentText()
-
         self.new_tab_session(ip, port, username, password, enable_pass, device_type)

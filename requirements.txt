@@ -1,5 +1,7 @@
 Yapsy~=1.12.2
 toml~=0.10.2
-ciscoconfparse~=1.5.50
 napalm~=3.3.1
 PySide6~=6.2.1
+PyYAML~=6.0
+ciscoconfparse~=1.5.30
+setuptools~=56.0.0

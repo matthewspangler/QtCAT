@@ -1,8 +1,0 @@
-[Core]
-Name = Get Facts
-Module = get_facts
-
-[Documentation]
-Author = Matthew Spangler
-Version = 0.1
-Description = List interfaces
