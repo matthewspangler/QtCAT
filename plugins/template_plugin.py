@@ -1,5 +1,3 @@
-from yapsy.IPlugin import IPlugin
-from device_session import QDeviceSession
 from ciscoconfparse import CiscoConfParse
 from yapsy.IPlugin import IPlugin
 import napalm
